@@ -1,20 +1,24 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { Menu, MenuItem } from "./src/screens/Menu";
+import { Carrinho } from "./src/screens/Carrinho";
+import { useState } from "react";
+
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+
+const [currentScreen, setCurrentScreen] = useState<'Menu' | 'Carrinho'>('Menu');
+ const [carrinho, setCarrinho] = useState<MenuItem[]>([])
+
+return (
+  <SafeAreaProvider>
+    {currentScreen === 'Menu'
+      ? <Menu
+          onAbrirCarrinho={() => setCurrentScreen('Carrinho')}
+          carrinho={carrinho}
+          onAdicionarAoCarrinho={(item) => setCarrinho([...carrinho, item])}
+        />
+      : <Carrinho onFecharCarrinho={() => setCurrentScreen('Menu')} carrinho={carrinho} />}
+  </SafeAreaProvider>
+);
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
